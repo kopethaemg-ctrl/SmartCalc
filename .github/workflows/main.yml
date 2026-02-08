@@ -1,0 +1,27 @@
+name: Build APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4  # v3 မှ v4 သို့ ပြောင်းထားပါသည်
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5  # v4 မှ v5 သို့ ပြောင်းထားပါသည်
+      with:
+        python-version: '3.12'
+        
+    - name: Install Flet
+      run: |
+        pip install flet
+        pip install -r requirements.txt
+        
+    - name: Build APK
+      run: flet build apk --project "SmartCalc" --org "com.smartcalc" --product "SmartCalc" --module-name main
+      
+    - name: Upload APK
+      uses: actions/upload-artifact@v4  # v3 မှ v4 သို့ ပြောင်းထားပါသည် (ဒါက အဓိကပါ)
+      with:
+        name: smartcalc-apk
+        path: build/apk/*.apk
